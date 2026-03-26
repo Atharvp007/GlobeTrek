@@ -3,9 +3,11 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Plane, Plus, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import LoginDialog from "./LoginDialog";
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -57,10 +59,16 @@ const Header = () => {
             <span className="hidden sm:inline">Create Trip</span>
           </Button>
 
-          <Button variant="destructive" className="flex items-center gap-2 px-5 hover:scale-105 transition">
+          <Button
+            variant="destructive"
+            className="flex items-center gap-2 px-5 hover:scale-105 transition"
+            onClick={() => setOpenDialog(true)}
+          >
             <User className="w-4 h-4" />
             Login
           </Button>
+
+          <LoginDialog open={openDialog} onClose={() => setOpenDialog(false)} />
         </motion.div>
       </div>
 

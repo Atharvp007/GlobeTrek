@@ -91,8 +91,12 @@ const Header = () => {
 
               <DropdownMenuContent className="w-56 bg-white/80 backdrop-blur-lg rounded-xl shadow-xl border border-white/30 p-2">
                 <div className="px-4 py-2">
-                  <p className="text-sm font-semibold text-gray-700">{user?.name}</p>
-                  <p className="text-xs text-gray-500 truncate">{user?.email}</p>
+                  <p className="text-sm font-semibold text-gray-700">
+                    {user?.name}
+                  </p>
+                  <p className="text-xs text-gray-500 truncate">
+                    {user?.email}
+                  </p>
                 </div>
 
                 <DropdownMenuSeparator className="my-1 border-gray-300/40" />
@@ -106,12 +110,12 @@ const Header = () => {
                 </DropdownMenuItem>
 
                 <DropdownMenuItem
-  onClick={handleLogout}
-  className="flex items-center gap-2 rounded-lg px-4 py-2 text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
->
-  <LogOut className="w-4 h-4 text-red-600" />
-  Logout
-</DropdownMenuItem>
+                  onClick={handleLogout}
+                  className="flex items-center gap-2 rounded-lg px-4 py-2 text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
+                >
+                  <LogOut className="w-4 h-4 text-red-600" />
+                  Logout
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (

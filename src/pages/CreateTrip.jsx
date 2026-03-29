@@ -3,12 +3,12 @@ import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import { SelectTravelersList, SelectBudgetOptions } from "../constants/Options";
 import { Toaster, toast } from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiCalendar } from "react-icons/fi"; // calendar icon
-import { Loader2 } from "lucide-react"; // loader icon
+import { FiCalendar } from "react-icons/fi";
+import { Loader2 } from "lucide-react";
 import { generateTripWithAI } from "../services/aiModel";
 import LoginDialog from "../components/shared/LoginDialog";
-import { setDoc, doc } from "firebase/firestore"; // make sure db is configured
-import { db } from "../services/firebaseConfig";// your firebase config
+import { setDoc, doc } from "firebase/firestore";
+import { db } from "../services/firebaseConfig";
 import { useNavigate } from "react-router-dom";
 
 const CreateTrip = () => {
@@ -43,7 +43,8 @@ const CreateTrip = () => {
       });
 
       toast.success("Trip saved successfully!");
-      navigate("/trips/" + docId);
+      // navigate with smooth effect
+      navigate(`/trips/${docId}`);
     } catch (error) {
       console.error(error);
       toast.error("Failed to save trip to database.");
@@ -88,10 +89,6 @@ const CreateTrip = () => {
   if (loading) {
     return (
       <div className="fixed inset-0 z-50 bg-gradient-to-b from-purple-50 to-pink-50 flex flex-col items-center justify-center p-6 overflow-hidden">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-400/20 rounded-full blur-3xl animate-pulse-slow" />
-        <div className="absolute top-10 right-1/4 w-80 h-80 bg-pink-400/20 rounded-full blur-3xl animate-pulse-slow delay-2000" />
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-96 h-96 bg-indigo-400/20 rounded-full blur-3xl animate-pulse-slow delay-4000" />
-
         <div className="relative flex items-center justify-center">
           <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-purple-300 via-pink-300 to-indigo-400 opacity-20 animate-spin-slow" />
           <div className="relative bg-white/90 p-6 rounded-3xl shadow-2xl flex items-center justify-center">
@@ -109,25 +106,26 @@ const CreateTrip = () => {
         <p className="mt-2 text-gray-600 text-center animate-pulse text-lg md:text-xl">
           Our AI is finding the best hotels, experiences, and hidden gems for you ✨
         </p>
-
-        <div className="flex mt-6 space-x-2">
-          <span className="w-3 h-3 bg-purple-500 rounded-full animate-bounce delay-75" />
-          <span className="w-3 h-3 bg-pink-500 rounded-full animate-bounce delay-150" />
-          <span className="w-3 h-3 bg-indigo-500 rounded-full animate-bounce delay-300" />
-        </div>
       </div>
     );
   }
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center px-4 py-16 bg-gradient-to-b from-gray-50 to-gray-100">
+    <motion.div
+      className="relative min-h-screen flex items-center justify-center px-4 py-16 bg-gradient-to-b from-gray-50 to-gray-100"
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -30 }}
+      transition={{ duration: 0.5 }}
+    >
       <Toaster position="bottom-right" reverseOrder={false} />
 
       <motion.div
         className="relative z-10 w-full max-w-3xl bg-white/60 backdrop-blur-2xl rounded-3xl shadow-2xl border border-white/30 flex flex-col overflow-hidden"
         initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.4 }}
+        exit={{ scale: 0.95, opacity: 0 }}
+        transition={{ duration: 0.5 }}
       >
         {/* Progress Bar */}
         <div className="h-2 bg-white/30">
@@ -167,8 +165,6 @@ const CreateTrip = () => {
                 className="flex flex-col gap-6"
               >
                 <h3 className="text-3xl font-bold">Where’s your next trip? ✈️</h3>
-                <p className="text-gray-600">Choose destination and duration</p>
-
                 <div>
                   <label className="font-medium">Destination</label>
                   <div className="mt-2">
@@ -226,23 +222,18 @@ const CreateTrip = () => {
                 className="flex flex-col gap-6"
               >
                 <h3 className="text-3xl font-bold">Select Budget 💰</h3>
-                <p className="text-gray-600">Choose your travel style</p>
-
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
                   {SelectBudgetOptions.map((item) => (
                     <div
                       key={item.id}
                       onClick={() =>
-                        !loading &&
-                        setFormData({ ...formData, budget: item.title })
+                        !loading && setFormData({ ...formData, budget: item.title })
                       }
                       className={`relative p-5 rounded-2xl cursor-pointer transition-all duration-300
                         bg-white/70 backdrop-blur-md border hover:shadow-xl hover:-translate-y-1
-                        ${
-                          formData.budget === item.title
-                            ? "border-purple-500 ring-2 ring-purple-300 scale-105"
-                            : "border-gray-200"
-                        }`}
+                        ${formData.budget === item.title
+                          ? "border-purple-500 ring-2 ring-purple-300 scale-105"
+                          : "border-gray-200"}`}
                     >
                       {formData.budget === item.title && (
                         <span className="absolute top-2 right-2 text-xs bg-purple-500 text-white px-2 py-1 rounded-full">
@@ -283,22 +274,18 @@ const CreateTrip = () => {
                 className="flex flex-col gap-6"
               >
                 <h3 className="text-3xl font-bold">Who’s traveling? 🧑‍🤝‍🧑</h3>
-
                 <div className="grid grid-cols-2 gap-5">
                   {SelectTravelersList.map((item) => (
                     <div
                       key={item.id}
                       onClick={() =>
-                        !loading &&
-                        setFormData({ ...formData, traveler: item.title })
+                        !loading && setFormData({ ...formData, traveler: item.title })
                       }
                       className={`relative p-5 rounded-2xl cursor-pointer transition-all duration-300
                         bg-white/70 backdrop-blur-md border hover:shadow-xl hover:-translate-y-1
-                        ${
-                          formData.traveler === item.title
-                            ? "border-purple-500 ring-2 ring-purple-300 scale-105"
-                            : "border-gray-200"
-                        }`}
+                        ${formData.traveler === item.title
+                          ? "border-purple-500 ring-2 ring-purple-300 scale-105"
+                          : "border-gray-200"}`}
                     >
                       {formData.traveler === item.title && (
                         <span className="absolute top-2 right-2 text-xs bg-purple-500 text-white px-2 py-1 rounded-full">
@@ -335,7 +322,7 @@ const CreateTrip = () => {
         onClose={() => setOpenDialog(false)}
         onLoginSuccess={handleSubmit}
       />
-    </div>
+    </motion.div>
   );
 };
 

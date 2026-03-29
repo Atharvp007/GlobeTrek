@@ -23,6 +23,11 @@ function TripDetails() {
   const [loadingHero, setLoadingHero] = useState(true);
   const navigate = useNavigate();
 
+  // Scroll to top whenever page loads
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
   // Fetch trip data from Firestore
   const fetchTripData = async () => {
     try {
@@ -58,7 +63,7 @@ function TripDetails() {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.4 }}
